@@ -15,7 +15,21 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+from .views import HomeView
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', HomeView.as_view(), name='homepage'),
+    url(r'^accounts/', include('registration.backends.default.urls')),
+    # url(r'^accounts/login', include('registration.backends.default.urls')),
+    # url(r'^accounts/logout', include('registration.backends.default.urls')),
+    url(r'^profile/', include('imagerprofile.urls')),
+    url(r'^images/', include('photo.urls'))
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

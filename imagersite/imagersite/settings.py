@@ -20,12 +20,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o_#gt3yq8z+eur#)t%aq1!hzc8^4aj4u7o_5fr%6v#_9l-$hyq'
+SECRET_KEY = '&@i78447tmxgbotjp(_@cap#(kcqa+8!w=34vef2q@7l8b62$!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+
+def show_toolbar(request):
+    return True
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+}
+# DELETE THAT TOO Before depploy^
 
 
 # Application definition
@@ -37,7 +45,16 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registration',
+    'imagerprofile',
+    'photo',
+    #delete this before deploying V
+    'debug_toolbar',
 )
+
+# registration redux
+ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = True  # Automatically log the user in.
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,6 +65,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    #delete this before deploying
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'imagersite.urls'
@@ -76,10 +95,24 @@ WSGI_APPLICATION = 'imagersite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': os.path.join(BASE_DIR, 'db.postgresql_psycopg2'),
+        'NAME': 'test',
+        #was imager_databse
+        'USER': 'james',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
+
+# working version:
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 # Internationalization
@@ -100,3 +133,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Media file handleing here
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Email
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'xxx.@gmail.com'
+EMAIL_HOST_PASSWORD = 'password123'
+EMAIL_PORT = 123
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FILE_PATH = 'emails'
+
+
+# For django-registration-redux
+ACCOUNT_ACTIVATION_DAYS = 7
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/login/'
